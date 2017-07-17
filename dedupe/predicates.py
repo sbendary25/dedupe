@@ -400,8 +400,18 @@ def latLongGridPredicate(field, digits=1):
     at the equator. But it should be reasonably precise given some
     prior logical block (e.g., country).
     """
+    # the field fed into this function wasn't a tuple
+    # but the function treated the values within field 
+    # as tuple values, so i had to convert them to actual float
+    # values and then type cast those to a string tuple (returnField)
+    translation_table = dict.fromkeys(map(ord, '()'), None)
+    field2 = field.translate(translation_table)
+    field2 = field2.split(',')
+    field2[0] = (round(float(field2[0]), digits))
+    field2[1] = (round(float(field2[1]), digits))
     if any(field) :
-        return (str([round(dim, digits) for dim in field]),)
+        return field2
+        #return (str([round(dim, digits) for dim in field]),)
     else :
         return ()
 
